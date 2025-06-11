@@ -19,10 +19,14 @@ async def health_check():
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
+print("Available models:")
 for m in genai.list_models():
-    print(m.name, m.supported_generation_methods)
+    print(f"Model: {m.name}")
+    print(f"Supported methods: {m.supported_generation_methods}")
+    print("---")
 
 model = genai.GenerativeModel("models/gemini-1.5-pro-latest")
+
 
 class Opportunity(BaseModel):
     Name: str
