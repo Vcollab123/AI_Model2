@@ -19,8 +19,10 @@ async def health_check():
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
+for m in genai.list_models():
+    print(m.name, m.supported_generation_methods)
 
-model = genai.GenerativeModel("gemini-pro")
+model = genai.GenerativeModel("models/gemini-pro")
 
 class Opportunity(BaseModel):
     Name: str
@@ -110,6 +112,4 @@ def score_opportunity(opp: Opportunity):
         }
     
     except Exception as e:
-        return {
-            "error": str(e)
-        }
+        return {"error": str(e)}
