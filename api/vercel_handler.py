@@ -1,4 +1,2 @@
-from app import app  # This imports your FastAPI app from app.py
+from .app import app  # ← use relative import
 
-# Vercel looks for a file-level variable named "app"
-# This is what Vercel's @vercel/python uses as the ASGI handler
