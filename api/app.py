@@ -86,24 +86,30 @@ Suggestion:"""
 
 @app.post("/score")
 def score_opportunity(opp: Opportunity):
-    activity = compute_activity_score(opp.Call, opp.Email, opp.Meeting)
-    sentiment = compute_sentiment_score(opp.Notes)
-    stage = compute_stage_duration_score(opp.Stage, opp.Days_In_Stage)
-    buying = detect_buying_signals(opp.Notes)
-    confidence = compute_confidence_score(activity, sentiment, stage, buying)
+    try:
+        activity = compute_activity_score(opp.Call, opp.Email, opp.Meeting)
+        sentiment = compute_sentiment_score(opp.Notes)
+        stage = compute_stage_duration_score(opp.Stage, opp.Days_In_Stage)
+        buying = detect_buying_signals(opp.Notes)
+        confidence = compute_confidence_score(activity, sentiment, stage, buying)
 
-    scores = {
-        "activity": activity,
-        "sentiment": sentiment,
-        "stage": stage,
-        "buying": buying,
-        "confidence": confidence
-    }
+        scores = {
+            "activity": activity,
+            "sentiment": sentiment,
+            "stage": stage,
+            "buying": buying,
+            "confidence": confidence
+        }
 
-    prompt = generate_prompt(opp, scores)
-    response = model.generate_content(prompt)
+        prompt = generate_prompt(opp, scores)
+        response = model.generate_content(prompt)
 
-    return {
-        "scores": scores,
-        "suggestion": response.text.strip()
-    }
+        return {
+            "scores": scores,
+            "suggestion": response.text.strip()
+        }
+    
+    except Exception as e:
+        return {
+            "error": str(e)
+        }
